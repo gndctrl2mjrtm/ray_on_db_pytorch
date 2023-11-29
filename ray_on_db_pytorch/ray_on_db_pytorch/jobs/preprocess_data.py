@@ -41,10 +41,6 @@ if __name__ == "__main__":
                         choices=envs,
                         default="prd")
 
-    parser.add_argument("--end_adweek",
-                        type=str,
-                        default="")
-
     args = parser.parse_args()
     env = args.env
 

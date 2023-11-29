@@ -15,18 +15,10 @@
       {
         "task_key": "preprocess_data",
         "run_if": "ALL_SUCCESS",
-        "notebook_task": {
-          "notebook_path": "/Users/stephen.offer@databricks.com/CloudSort",
-          "source": "WORKSPACE"
+        "spark_python_task": {
+          "python_file": "/Repos/stephen.offer@databricks.com/ray_on_db_pytorch/ray_on_db_pytorch/ray_on_db_pytorch/jobs/preprocess_data.py"
         },
         "job_cluster_key": "ray_pytorch_demo_cluster",
-        "libraries": [
-          {
-            "pypi": {
-              "package": "ray[data,train,tune,serve]"
-            }
-          }
-        ],
         "timeout_seconds": 0,
         "email_notifications": {},
         "notification_settings": {
@@ -44,18 +36,10 @@
           }
         ],
         "run_if": "ALL_SUCCESS",
-        "notebook_task": {
-          "notebook_path": "/Users/stephen.offer@databricks.com/CloudSort",
-          "source": "WORKSPACE"
+        "spark_python_task": {
+          "python_file": "/Repos/stephen.offer@databricks.com/ray_on_db_pytorch/ray_on_db_pytorch/ray_on_db_pytorch/jobs/train_model.py"
         },
         "job_cluster_key": "ray_pytorch_demo_cluster",
-        "libraries": [
-          {
-            "pypi": {
-              "package": "ray[data,train,tune,serve]"
-            }
-          }
-        ],
         "timeout_seconds": 0,
         "email_notifications": {},
         "notification_settings": {
@@ -73,13 +57,18 @@
           }
         ],
         "run_if": "ALL_SUCCESS",
-        "notebook_task": {
-          "notebook_path": "/Users/stephen.offer@databricks.com/CloudSort",
-          "source": "WORKSPACE"
+        "spark_python_task": {
+          "python_file": "/Repos/stephen.offer@databricks.com/ray_on_db_pytorch/ray_on_db_pytorch/ray_on_db_pytorch/jobs/serve_model.py"
         },
         "job_cluster_key": "ray_pytorch_demo_cluster",
         "timeout_seconds": 0,
-        "email_notifications": {}
+        "email_notifications": {},
+        "notification_settings": {
+          "no_alert_for_skipped_runs": false,
+          "no_alert_for_canceled_runs": false,
+          "alert_on_last_attempt": false
+        },
+        "webhook_notifications": {}
       }
     ],
     "job_clusters": [
@@ -104,5 +93,6 @@
       }
     ],
     "format": "MULTI_TASK"
-  }
+  },
+  "created_time": 1701279982618
 }

@@ -23,11 +23,10 @@ from .model import SentimentModel
 from .shared.ray_utils import init_ray, delta_to_raydata
 from .shared.pytorch_utils import tokenize_sentence
 
-
 USER = "stephen.offer@databricks.com"
 MLFLOW_MODEL_NAME = "RAY_PYTORCH_DEMO"
 MODEL_TYPE = "bert-base-cased"
-EXPERIMENT_NAME = f"{}_{MLFLOW_MODEL_NAME}"
+EXPERIMENT_NAME = f"{MODEL_TYPE}_{MLFLOW_MODEL_NAME}"
 MLFLOW_PATH = f"/Users/{USER}"
 
 train_func_config = {
@@ -88,7 +87,7 @@ def main(config, use_gpu):
         name="ptl-sent-classification",
         callbacks=[
             MLflowLoggerCallback(
-                experiment_name=os.path.join(MLFLOW_PATH, experiment_name)
+                experiment_name=os.path.join(MLFLOW_PATH, EXPERIMENT_NAME)
             )
         ],
         checkpoint_config=CheckpointConfig(
@@ -116,7 +115,6 @@ def main(config, use_gpu):
     # signature = infer_signature(validation_dataset.numpy(), model(validation_dataset).detach().numpy())
     with mlflow.start_run() as run:
         mlflow.pytorch.log_model(model, MLFLOW_MODEL_NAME)
-
 
 
 if __name__ == "__main__":
@@ -151,4 +149,4 @@ if __name__ == "__main__":
     init_ray(n_gpus_per_node=n_gpus_per_node)
 
     config = env_vars[env]
-    main(conifg, use_gpu)
+    main(config, use_gpu)
