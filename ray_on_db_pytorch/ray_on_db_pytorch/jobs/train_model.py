@@ -131,9 +131,21 @@ if __name__ == "__main__":
                         choices=["True", "true", "TRUE", "False", "false", "FALSE", "None"],
                         default="None")
 
+    parser.add_argument("--use_autoscaler",
+                        type=str,
+                        choices=["True", "true", "TRUE", "False", "false", "FALSE"],
+                        default="False")
+
     args = parser.parse_args()
     env = args.env
     use_gpu = args.use_gpu
+    use_autoscaler = args.use_autoscaler
+
+    if use_autoscaler.lower() == "true":
+        use_autoscaler = True
+    elif use_autoscaler.lower() == "false":
+        use_autoscaler = False
+
     if use_gpu.lower() == "true":
         use_gpu = True
     elif use_gpu.lower() == "false":
@@ -146,7 +158,7 @@ if __name__ == "__main__":
     else:
         n_gpus_per_node = 0
 
-    init_ray(n_gpus_per_node=n_gpus_per_node)
+    init_ray(n_gpus_per_node=n_gpus_per_node, autoscale=use_autoscaler)
 
     config = env_vars[env]
     main(config, use_gpu)

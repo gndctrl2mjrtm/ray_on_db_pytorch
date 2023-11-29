@@ -31,3 +31,4 @@ env_vars = {
         "training_data": train_table_default_name,
         "validation_data": val_table_default_name
     }
+}
