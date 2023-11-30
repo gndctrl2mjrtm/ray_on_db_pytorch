@@ -22,6 +22,7 @@ from .configs.train_config import env_vars
 from .model import SentimentModel
 from .shared.ray_utils import init_ray, delta_to_raydata
 from .shared.pytorch_utils import tokenize_sentence
+from .shared.spark_utils import get_n_cpus_per_node
 
 
 # Global variables for the particular training job
@@ -31,9 +32,9 @@ USER = "stephen.offer@databricks.com"
 # Model name to store in the model registry
 MLFLOW_MODEL_NAME = "RAY_PYTORCH_DEMO"
 # Model name
-MODEL_TYPE = "bert_base_cased"
+MODEL_TYPE = "BERT_BASE_CASED"
 # Create the experiment name
-EXPERIMENT_NAME = f"{MODEL_TYPE.}_{MLFLOW_MODEL_NAME}".upper()
+EXPERIMENT_NAME = f"{MODEL_TYPE}_{MLFLOW_MODEL_NAME}"
 # Generate MLflow path
 MLFLOW_PATH = f"/Users/{USER}"
 
@@ -153,6 +154,10 @@ if __name__ == "__main__":
                         choices=["True", "true", "TRUE", "False", "false", "FALSE", "None"],
                         default="None")
 
+    parser.add_argument("--n_workers",
+                        type=int,
+                        default=None)
+
     parser.add_argument("--use_autoscaler",
                         type=str,
                         choices=["True", "true", "TRUE", "False", "false", "FALSE"],
@@ -162,6 +167,7 @@ if __name__ == "__main__":
     env = args.env
     use_gpu = args.use_gpu
     use_autoscaler = args.use_autoscaler
+    n_workers = args.n_workers
 
     if use_autoscaler.lower() == "true":
         use_autoscaler = True
@@ -180,7 +186,11 @@ if __name__ == "__main__":
     else:
         n_gpus_per_node = 0
 
-    init_ray(n_gpus_per_node=n_gpus_per_node, autoscale=use_autoscaler)
+    n_cpus_per_node = get_n_cpus_per_node()
+
+    init_ray(n_gpus_per_node=n_gpus_per_node,
+             n_cpus_per_node=n_cpus_per_node,
+             autoscale=use_autoscaler)
 
     config = env_vars[env]
     main(config, use_gpu)
