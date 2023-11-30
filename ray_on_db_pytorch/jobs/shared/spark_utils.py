@@ -16,5 +16,5 @@ def file_exists(path):
     try:
         dbutils.fs.ls(path)
         return True
-    except Exception:
+    except Exception as e:
         return False

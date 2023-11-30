@@ -23,12 +23,21 @@ from .model import SentimentModel
 from .shared.ray_utils import init_ray, delta_to_raydata
 from .shared.pytorch_utils import tokenize_sentence
 
+
+# Global variables for the particular training job
+# Username to store MLflow values
+# CHANGE TO PERSONAL USERNAME IN THE DATABRICKS WORKSPACE
 USER = "stephen.offer@databricks.com"
+# Model name to store in the model registry
 MLFLOW_MODEL_NAME = "RAY_PYTORCH_DEMO"
-MODEL_TYPE = "bert-base-cased"
-EXPERIMENT_NAME = f"{MODEL_TYPE}_{MLFLOW_MODEL_NAME}"
+# Model name
+MODEL_TYPE = "bert_base_cased"
+# Create the experiment name
+EXPERIMENT_NAME = f"{MODEL_TYPE.}_{MLFLOW_MODEL_NAME}".upper()
+# Generate MLflow path
 MLFLOW_PATH = f"/Users/{USER}"
 
+# Training configuration for the train function
 train_func_config = {
     "lr": 1e-5,
     "eps": 1e-8,
@@ -38,6 +47,11 @@ train_func_config = {
 
 
 def train_func(config):
+    """
+
+    @param config:
+    @return:
+    """
     # Unpack the input configs passed from `TorchTrainer(train_loop_config)`
     lr = config["lr"]
     eps = config["eps"]
@@ -71,18 +85,26 @@ def train_func(config):
 
 
 def main(config, use_gpu):
+    """
+
+    @param config: Configuration dict
+    @param use_gpu: Boolean value of whether to use GPUs
+    @return:
+    """
+    # Get the training and validation datasets from Unity Catalog
     train_data_table = f"{config['uc_catalog']}.{config['schema']}.{config['training_data']}"
     val_data_table = f"{config['uc_catalog']}.{config['schema']}.{config['validation_data']}"
 
+    # Read the Delta Lake tables in Unityb Catalog and load into Ray Data
     train_dataset = delta_to_raydata(train_data_table)
     validation_dataset = delta_to_raydata(val_data_table)
 
+    # Map the tokenize_sentence across the datasets
     train_dataset = train_dataset.map_batches(tokenize_sentence, batch_format="numpy")
     validation_dataset = validation_dataset.map_batches(tokenize_sentence, batch_format="numpy")
 
     # Save the top-2 checkpoints according to the evaluation metric
     # The checkpoints and metrics are reported by `RayTrainReportCallback`
-
     run_config = RunConfig(
         name="ptl-sent-classification",
         callbacks=[
