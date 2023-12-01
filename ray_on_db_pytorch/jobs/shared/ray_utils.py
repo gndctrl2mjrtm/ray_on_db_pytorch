@@ -91,10 +91,16 @@ def init_ray(run_on_spark=True,
     if run_on_spark is True:
         if n_workers is None:
             n_workers = ray.util.spark.MAX_NUM_WORKER_NODES
-        init_ray_on_spark(n_workers=n_workers,
-                          n_cpus_per_node=n_cpus_per_node,
-                          n_gpus_per_node=n_gpus_per_node,
-                          log_path=log_path,
-                          autoscale=autoscale)
+        if n_gpus_per_node == 0:
+            init_ray_on_spark(n_workers=n_workers,
+                              n_cpus_per_node=n_cpus_per_node,
+                              log_path=log_path,
+                              autoscale=autoscale)
+        else:
+            init_ray_on_spark(n_workers=n_workers,
+                              n_cpus_per_node=n_cpus_per_node,
+                              n_gpus_per_node=n_gpus_per_node,
+                              log_path=log_path,
+                              autoscale=autoscale)
     else:
         init_ray_locally(address=address)
