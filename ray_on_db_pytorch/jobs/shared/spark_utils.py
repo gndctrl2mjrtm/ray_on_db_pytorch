@@ -23,6 +23,6 @@ def file_exists(path):
 
 def get_n_cpus_per_node():
     spark = SparkSession.builder.getOrCreate()
-    sc = SparkContext()
+    sc = SparkContext.getOrCreate()
     return int(int(sc.defaultParallelism)/int(spark.conf.get("spark.databricks.clusterUsageTags.clusterWorkers")))
 
