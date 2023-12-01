@@ -38,7 +38,7 @@ Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/gndctrl2mjrtm/ray_on_db_pytorch/tarball/master
+    $ curl -OJL https://github.com/stephenoffer/ray_on_db_pytorch/tarball/master
 
 Once you have a copy of the source, you can install it with:
 

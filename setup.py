@@ -43,7 +43,7 @@ setup(
     packages=find_packages(include=['ray_on_db_pytorch', 'ray_on_db_pytorch.*']),
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/gndctrl2mjrtm/ray_on_db_pytorch',
+    url='https://github.com/stephenoffer/ray_on_db_pytorch',
     version='0.1.0',
     zip_safe=False,
 )

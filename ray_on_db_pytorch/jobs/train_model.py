@@ -18,12 +18,11 @@ from ray.train.lightning import (
 )
 from ray.train.torch import TorchTrainer
 
-from .configs.train_config import env_vars
-from .model import SentimentModel
-from .shared.ray_utils import init_ray, delta_to_raydata
-from .shared.pytorch_utils import tokenize_sentence
-from .shared.spark_utils import get_n_cpus_per_node
-
+from ray_on_db_pytorch.jobs.configs.train_config import env_vars
+from ray_on_db_pytorch.jobs.model import SentimentModel
+from ray_on_db_pytorch.jobs.shared.ray_utils import init_ray, delta_to_raydata
+from ray_on_db_pytorch.jobs.shared.pytorch_utils import tokenize_sentence
+from ray_on_db_pytorch.jobs.shared.spark_utils import get_n_cpus_per_node
 
 # Global variables for the particular training job
 # Username to store MLflow values
